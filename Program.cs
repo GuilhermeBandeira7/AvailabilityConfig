@@ -2,9 +2,10 @@
 {
     public class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
-            await Dialog.Dialog.InitialDialog();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Dialog.Dialog.InitialDialog();
         }
     }
 }

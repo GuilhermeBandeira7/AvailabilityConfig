@@ -1,4 +1,5 @@
 ﻿using AvailabilityConfig.Context;
+using AvailabilityConfig.CustomException;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,40 +20,76 @@ namespace AvailabilityConfig
             _context = context;
         }
 
-        public async Task<AvailabilityConfig> GetAvailabilityConfig(string camIP)
+        public async Task<List<AvailabilityConfig>> GetAllAvConfigs()
         {
             try
             {
-                 AvailabilityConfig? config = await _context.Configs
-                    .Include(c => c.Camera)
-                    .Where(conf => conf.Camera.Ip == camIP)
-                    .SingleOrDefaultAsync();
+                List<AvailabilityConfig> configs = await _context.Configs.ToListAsync();
+                if (!configs.Any())
+                    throw new ConfigException("Any configuration was found.");
 
-                if (config != null)
-                    return config;
-
+                return configs;
+            }
+            catch(ConfigException ex)
+            {
+                Console.WriteLine(ex.Message);
                 return new();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return new();
             }
         }
 
-        public async Task PostAvailabilityConfig(AvailabilityConfig avConfig)
+        public async Task<AvailabilityConfig> GetAvailabilityConfig(string camIP)
         {
             try
             {
-                if(avConfig != null)
-                {
-                    await _context.Configs.AddAsync(avConfig);
-                    await _context.SaveChangesAsync();  
-                }
+                AvailabilityConfig? config = await _context.Configs
+                   .Include(c => c.Camera)
+                   .Where(conf => conf.Camera.Ip == camIP)
+                   .SingleOrDefaultAsync();
+
+                if (config != null)
+                    return config;
+
+                return new();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return new();
+            }
+        }
+
+        public async Task<Response> PostAvailabilityConfig(AvailabilityConfig avConfig)
+        {
+            try
+            {
+                await _context.Configs.AddAsync(avConfig);
+                await _context.SaveChangesAsync();
+                return new Response(true, "Configuration added successfully.");
+            }
+            catch (Exception ex)
+            {
+
+                return new Response(false, ex.Message);
+            }
+        }
+
+        public async Task<Response> DeleteAvailabilityConfig(long id)
+        {
+            try
+            {
+                await _context.Configs.Where(c => c.Id == id).ExecuteDeleteAsync();
+                await _context.SaveChangesAsync();
+                return new Response(true, "Configuration deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new Response(false, "Failed to delete configuration.");
             }
         }
 
