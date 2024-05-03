@@ -20,33 +20,31 @@ namespace AvailabilityConfig
             _context = context;
         }
 
-        public async Task<List<AvailabilityConfig>> GetAllAvConfigs()
+        public async Task<List<Config>> GetAllAvConfigs()
         {
             try
             {
-                List<AvailabilityConfig> configs = await _context.Configs.ToListAsync();
+                List<Config> configs = await _context.Configs.ToListAsync();
                 if (!configs.Any())
                     throw new ConfigException("Any configuration was found.");
 
                 return configs;
             }
-            catch(ConfigException ex)
+            catch(ConfigException)
             {
-                Console.WriteLine(ex.Message);
-                return new();
+                throw;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
-                return new();
+                throw;
             }
         }
 
-        public async Task<AvailabilityConfig> GetAvailabilityConfig(string camIP)
+        public async Task<Config> GetAvailabilityConfig(string camIP)
         {
             try
             {
-                AvailabilityConfig? config = await _context.Configs
+                Config? config = await _context.Configs
                    .Include(c => c.Camera)
                    .Where(conf => conf.Camera.Ip == camIP)
                    .SingleOrDefaultAsync();
@@ -56,14 +54,13 @@ namespace AvailabilityConfig
 
                 return new();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
-                return new();
+                throw;
             }
         }
 
-        public async Task<Response> PostAvailabilityConfig(AvailabilityConfig avConfig)
+        public async Task<Response> PostAvailabilityConfig(Config avConfig)
         {
             try
             {
@@ -71,10 +68,9 @@ namespace AvailabilityConfig
                 await _context.SaveChangesAsync();
                 return new Response(true, "Configuration added successfully.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                return new Response(false, ex.Message);
+                throw;
             }
         }
 
@@ -86,10 +82,9 @@ namespace AvailabilityConfig
                 await _context.SaveChangesAsync();
                 return new Response(true, "Configuration deleted successfully");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
-                return new Response(false, "Failed to delete configuration.");
+                throw;
             }
         }
 

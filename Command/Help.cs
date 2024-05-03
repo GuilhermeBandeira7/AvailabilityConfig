@@ -9,7 +9,7 @@ namespace AvailabilityConfig.Command
 {
     [DocCommand(instruction: "help",
         documentation: "Displays on the console help information. \n" +
-        "help <COMMAND NAME> to access help about a specific command.\n")]
+        "command: help <COMMAND NAME> to access help about a specific command.\n")]
     internal class Help: ICommand
     {
         private Dictionary<string, DocCommand> Docs;
@@ -34,7 +34,7 @@ namespace AvailabilityConfig.Command
             if (parameters.Length == 1)
             {
                 Console.WriteLine($"\nAvailabilityConfig (1.0) - Command line app (CLI).");
-                Console.WriteLine($"Create, Modify, Update and Delete configurations for camera monotoring.");
+                Console.WriteLine($"Create, Modify, Update and Delete configurations for camera monotoring.\n");
                 Console.WriteLine($"Possible Commands: \n");
 
                 foreach (var doc in Docs.Values)

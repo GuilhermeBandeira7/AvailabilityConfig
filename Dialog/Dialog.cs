@@ -5,13 +5,11 @@ namespace AvailabilityConfig.Dialog
 {
     public static class Dialog
     {
-        public static void InitialDialog()
+        public static void InitialDialog(SystemCommands commands)
         {
             Console.WriteLine("===============================");
             Console.WriteLine("Welcome to Availability Config");
-            Console.WriteLine("===============================\n");
-            
-            SystemCommands commands = new SystemCommands();
+            Console.WriteLine("===============================\n");                   
 
             Console.WriteLine("For more information type 'help'.\n");
 
@@ -30,11 +28,13 @@ namespace AvailabilityConfig.Dialog
                 }
                 catch(ConfigException confEx)
                 {
-                    Console.WriteLine(confEx.Message);
+                    Console.WriteLine(confEx.Message, Console.ForegroundColor = ConsoleColor.Red);
+                    Console.ForegroundColor = ConsoleColor.Green;
                 }
                 catch(Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                    Console.ForegroundColor = ConsoleColor.Green;
                 }
             }
         }       

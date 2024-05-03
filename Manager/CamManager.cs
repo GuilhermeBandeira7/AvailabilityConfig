@@ -1,10 +1,7 @@
 ﻿using AvailabilityConfig.Context;
+using AvailabilityConfig.CustomException;
 using AvailabilityConfig.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace AvailabilityConfig.Manager
 {
@@ -15,10 +12,40 @@ namespace AvailabilityConfig.Manager
 
         public static Response CameraExist(string camIP)
         {
-            CameraInfo? camera = _context.Cameras.Where(c => c.Ip == camIP).FirstOrDefault();
+            Camera? camera = _context.Cameras.Where(c => c.Ip == camIP).FirstOrDefault();
             if (camera == null)
                 return new Response(false, "Camera not found.");
             return new Response(true, camera);
         }
+
+        public static async Task CreateNewCamera()
+        {
+            try
+            {
+                Camera camera = new Camera();
+                foreach(PropertyInfo property in typeof(Camera).GetProperties())
+                {
+                    if(property.PropertyType == typeof(string))
+                    {
+                        Console.WriteLine($"{property.Name}:");
+                        string? prop = Console.ReadLine();
+                        if (prop == string.Empty || prop == null)
+                            throw new ConfigException($"{property.Name} can't be empty.");
+                        property.SetValue(camera, prop);
+                    }
+                }
+                await _service.PostCamera(camera);
+            }
+            catch(ConfigException ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+        }      
     }
 }

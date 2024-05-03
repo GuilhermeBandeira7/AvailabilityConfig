@@ -10,43 +10,73 @@ using System.Threading.Tasks;
 namespace AvailabilityConfig.Command
 {
     [DocCommand(instruction: "create",
-        documentation: "prompt the user to create a new configuration. \n"+
-        "create <PARAMATER> to prompt for new configuration(s).\n")]
+        documentation: "prompt the user to create a new configuration or camera. \n" +
+        "command: create <PARAMATER> to prompt for creation(s).\n")]
     internal class Create : ICommand
     {
-        public Task ExecuteCommandAsync(string[] args)
+        public async Task ExecuteCommandAsync(string[] args)
         {
-            _ = InitializeConfigCreation(args); 
-            return Task.CompletedTask;
+            await InitializeCreation(args);
         }
 
-        private static async Task InitializeConfigCreation(string[] args)
+        private static async Task InitializeCreation(string[] args)
+        {
+            try
+            {
+                if (args.Length > 1)
+                {
+                    if (args[1] == "config")
+                        await CreateConfig();
+                    else
+                        await CreateCamera();
+                }
+                else
+                    throw new ConfigException("'create' needs the following parameters: <config> or <camera>");
+
+            }
+            catch (ConfigException confEx)
+            {
+                Console.WriteLine(confEx.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+        }
+
+        private static async Task CreateConfig()
         {
             try
             {
                 Console.WriteLine("Camera IP: ");
                 string? ip = Console.ReadLine();
-                CameraInfo? cam = null;
 
                 if (ip == string.Empty || ip == null)
                     throw new ConfigException("Invalid IP.");
 
                 Response res = CamManager.CameraExist(ip);
-                if(res.Result == false)
-                    Console.WriteLine(res.Message);
+                if (res.Result == false || res.Value == null)
+                    throw new ConfigException(res.Message);
 
-                if (res.Value == null)
-                    throw new ConfigException("Camera not found.");
+                Camera cam = (Camera)res.Value;
 
-                cam = (CameraInfo)res.Value;
                 await ConfigManager.CreateNewConfig(cam);
-
-                Console.Clear();
             }
-            catch (Exception ex)
+            catch (ConfigException)
             {
-                Console.WriteLine(ex.Message);
+                throw;
             }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private static async Task CreateCamera()
+        {
+            await CamManager.CreateNewCamera();
         }
     }
 }

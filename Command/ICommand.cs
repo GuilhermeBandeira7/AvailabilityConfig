@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AvailabilityConfig.Command
 {
-    internal interface ICommand
+    public interface ICommand
     {
         Task ExecuteCommandAsync(string[] args);
     }

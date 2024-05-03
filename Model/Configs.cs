@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AvailabilityConfig
 {
-    public class AvailabilityConfig
+    public class Config
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -18,6 +18,6 @@ namespace AvailabilityConfig
         public string currentStatus { get; set; } = string.Empty;
 
         [ForeignKey("CameraId")]
-        public CameraInfo Camera { get; set; } = new();
+        public Camera Camera { get; set; } = new();
     }
 }

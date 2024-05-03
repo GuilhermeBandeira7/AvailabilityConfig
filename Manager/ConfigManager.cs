@@ -1,61 +1,77 @@
 ﻿using AvailabilityConfig.Context;
 using AvailabilityConfig.CustomException;
+using System.Reflection;
+using System;
+using System.Xml.Linq;
 
 namespace AvailabilityConfig
 {
     public class ConfigManager
     {
-        private static readonly OraclaDbContext _context = new OraclaDbContext();
-        private static readonly AvConfigService _service = new AvConfigService(_context);
+        private static readonly OraclaDbContext _context = new();
+        private static readonly AvConfigService _service = new(_context);
 
-        public static async Task CreateNewConfig(CameraInfo cam)
+        public static async Task CreateNewConfig(Camera cam)
         {
-            AvailabilityConfig AvConfig = new()
+            try
             {
-                Camera = cam
-            };
+                Config config = new Config();   
+                config.Camera = cam;    
 
-            Console.WriteLine("\nName: ");
-            string? name = Console.ReadLine();
-            if (name == string.Empty || name == null)
-                throw new ConfigException("Name can't be empty.");
+                foreach(PropertyInfo property in config.GetType().GetProperties())
+                {
+                    if(property.PropertyType == typeof(string))
+                    {
+                        Console.WriteLine($"{property.Name}:");
+                        string? prop = Console.ReadLine();
+                        if (prop == null || prop == string.Empty)
+                            throw new ConfigException($"{property.Name} can't be empty.");
 
-            bool successfullParse = true;
+                        property.SetValue(config, prop);
+                        continue;
+                    }                
 
-            Console.WriteLine("\nPing Time: ");
-            successfullParse = double.TryParse(Console.ReadLine(), out double pingTime);
-            if (!successfullParse)
-                throw new ConfigException("Ping time has to be a numeric value.");
+                    if (property.PropertyType == typeof(double))
+                    {
+                        Console.WriteLine($"{property.Name}:");
+                        double propParsed;
+                        bool successfullParse = double.TryParse(Console.ReadLine(), out propParsed);
+                        if (!successfullParse)
+                            throw new ConfigException($"{property.Name} requires a decimal value.");
+                        property.SetValue(config, propParsed);
+                    }
 
-            Console.WriteLine("\nPings To Offline: ");
-            successfullParse = int.TryParse(Console.ReadLine(), out int pingsToOffline);
-            if(!successfullParse)
-                throw new ConfigException("Pings to offline has to be a numeric value.");
+                    if (property.PropertyType == typeof(int) && property.Name != "Id")
+                    {
+                        Console.WriteLine($"{property.Name}:");
+                        int propParsed;
+                        bool successfullParse = int.TryParse(Console.ReadLine(), out propParsed);
+                        if (!successfullParse)
+                            throw new ConfigException($"{property.Name} requires an integer value.");
+                        property.SetValue(config, propParsed);
+                    }
+                }
+                Response res = await _service.PostAvailabilityConfig(config);
+                Console.WriteLine(res.Message);
 
-            Console.WriteLine("\nVerification Time: ");
-            successfullParse = double.TryParse(Console.ReadLine(), out double verificationTime);
-            if (!successfullParse)
-                throw new ConfigException("Verification has to be a numeric value.");
+            }
+            catch (ConfigException ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
 
-            Console.WriteLine("\nCurrent status: ");
-            string? status = Console.ReadLine();
-            if (status == string.Empty || status == null)
-                throw new ConfigException("Status can't be empty.");
-
-            AvConfig.Name = name;
-            AvConfig.PingTime = pingTime;
-            AvConfig.PingsToOffline = pingsToOffline;
-            AvConfig.VerificationTime = verificationTime;
-            AvConfig.currentStatus = status;
-
-            Response res = await _service.PostAvailabilityConfig(AvConfig);
-            Console.WriteLine(res.Message);
         }
 
-        public static async Task<List<AvailabilityConfig>> ListAllConfigs()
+        public static async Task<List<Config>> ListAllConfigs()
         {
-            List<AvailabilityConfig>? configs = await _service.GetAllAvConfigs();
-            return configs; 
+            List<Config>? configs = await _service.GetAllAvConfigs();
+            return configs;
         }
 
         public static async Task<Response> DeleteConfig(long id)
