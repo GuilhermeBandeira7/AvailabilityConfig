@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,5 +21,15 @@ namespace AvailabilityConfig
         public DateTime? LastVerification { get; set; }
 
         public List<Config> AvailabilityConfigs { get; set; } = new();
+
+        public override string ToString()
+        {
+            StringBuilder cameraObjToString = new StringBuilder();
+            cameraObjToString.Append($"Id:{Id} Name:{Name} Direction:{Direction} ")
+                .AppendLine().Append($"Highway:{Highway} Parentes:{Parents} Latitude Longitude:{LATLNG} ")
+                .AppendLine().Append($"KM Complement:{KmComplement} Status:{Status} Last Verification:{LastVerification.ToString()}\n");
+
+            return cameraObjToString.ToString();
+        }
     }
 }

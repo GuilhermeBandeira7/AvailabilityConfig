@@ -65,13 +65,28 @@ namespace AvailabilityConfig
                 Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
                 Console.ForegroundColor = ConsoleColor.Green;
             }
-
         }
 
-        public static async Task<List<Config>> ListAllConfigs()
+        public static async Task ListAllConfigs()
         {
-            List<Config>? configs = await _service.GetAllAvConfigs();
-            return configs;
+            try
+            {
+                List<Config> configs = await _service.GetAllAvConfigs();
+                foreach(Config config in configs)
+                {
+                    Console.WriteLine(config.ToString());
+                }
+            }
+            catch(ConfigException ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
         }
 
         public static async Task<Response> DeleteConfig(long id)

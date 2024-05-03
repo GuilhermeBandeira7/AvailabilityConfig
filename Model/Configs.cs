@@ -19,5 +19,15 @@ namespace AvailabilityConfig
 
         [ForeignKey("CameraId")]
         public Camera Camera { get; set; } = new();
+
+        public override string ToString()
+        {
+            StringBuilder configObjToString = new StringBuilder();
+            configObjToString.Append($"Id:{Id} Name:{Name} Value:{Value} ")
+                .AppendLine().Append($"Ping Time:{PingTime} Pings to Offline:{PingsToOffline} Verification Time:{VerificationTime} ")
+                .AppendLine().Append($"Current Status:{currentStatus}\n");
+
+            return configObjToString.ToString();
+        }
     }
 }

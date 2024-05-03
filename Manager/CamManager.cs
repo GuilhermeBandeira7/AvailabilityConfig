@@ -47,5 +47,45 @@ namespace AvailabilityConfig.Manager
                 Console.ForegroundColor = ConsoleColor.Green;
             }
         }      
+
+        public static async Task ListAllCameras()
+        {
+            try
+            {
+                List<Camera> camList = await _service.GetCameras();
+                foreach (Camera camera in camList)
+                {
+                    Console.WriteLine(camera.ToString());
+                }
+            }
+            catch(ConfigException ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+        }
+
+        public static async Task DeleteCamera(long id)
+        {
+            try
+            {
+                await _service.DeleteCamera(id);
+            }
+            catch (ConfigException ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+        }
     }
 }

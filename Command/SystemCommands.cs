@@ -15,7 +15,9 @@ namespace AvailabilityConfig.Command
             {"create", new Create() },
             {"create config", new Create() },
             {"create camera", new Create() },
-            {"clear", new Clear() }
+            {"clear", new Clear() },
+            {"list camera", new List() },
+            {"list config", new List() }
         };
 
         public ICommand? this[string key] => Commands.ContainsKey(key) ? Commands[key] : null;

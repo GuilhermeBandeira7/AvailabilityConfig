@@ -29,10 +29,9 @@ namespace AvailabilityConfig.Service
                 }
                 return cameras;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
-                return new();
+                throw;
             }
         }
 
@@ -46,10 +45,9 @@ namespace AvailabilityConfig.Service
                     return camera;
                 throw new Exception();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
-                return new Camera();
+                throw;
             }
         }
 
@@ -67,9 +65,9 @@ namespace AvailabilityConfig.Service
                 else
                     throw new Exception("Failed to update.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return new Response(false, ex.Message);
+                throw;
             }
         }
 
@@ -87,17 +85,17 @@ namespace AvailabilityConfig.Service
             }
         }
 
-        public async Task<Response> DeleteCamera(long id)
+        public async Task DeleteCamera(long id)
         {
             try
             {
                 await _context.Cameras.Where(cam => cam.Id == id).ExecuteDeleteAsync();
                 await _context.SaveChangesAsync();
-                return new Response(true, "Camera deleted successfully.");
+                Console.WriteLine("Camera deleted successfully.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return new Response(false, ex.Message);
+                throw;
             }
         }
     }
