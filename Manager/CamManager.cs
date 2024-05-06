@@ -1,5 +1,6 @@
 ﻿using AvailabilityConfig.Context;
 using AvailabilityConfig.CustomException;
+using AvailabilityConfig.Model;
 using AvailabilityConfig.Service;
 using System.Reflection;
 
@@ -22,28 +23,20 @@ namespace AvailabilityConfig.Manager
         {
             try
             {
-                Camera camera = new Camera();
-                foreach(PropertyInfo property in typeof(Camera).GetProperties())
-                {
-                    if(property.PropertyType == typeof(string))
-                    {
-                        Console.WriteLine($"{property.Name}:");
-                        string? prop = Console.ReadLine();
-                        if (prop == string.Empty || prop == null)
-                            throw new ConfigException($"{property.Name} can't be empty.");
-                        property.SetValue(camera, prop);
-                    }
-                }
+                Camera camera = ObjectFactory.CreateNewObj("camera") as Camera ?? 
+                    throw new ConfigException("Camera can't be empty value.");
                 await _service.PostCamera(camera);
             }
-            catch(ConfigException ex)
+            catch (ConfigException ex)
             {
                 Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
-                Console.ForegroundColor = ConsoleColor.Green;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+            }
+            finally
+            {
                 Console.ForegroundColor = ConsoleColor.Green;
             }
         }      
@@ -58,14 +51,16 @@ namespace AvailabilityConfig.Manager
                     Console.WriteLine(camera.ToString());
                 }
             }
-            catch(ConfigException ex)
+            catch (ConfigException ex)
             {
                 Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
-                Console.ForegroundColor = ConsoleColor.Green;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+            }
+            finally
+            {
                 Console.ForegroundColor = ConsoleColor.Green;
             }
         }
@@ -79,11 +74,39 @@ namespace AvailabilityConfig.Manager
             catch (ConfigException ex)
             {
                 Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
-                Console.ForegroundColor = ConsoleColor.Green;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+            }
+            finally
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+        }
+
+        public static async Task EditCamera()
+        {
+            try
+            {
+                Console.WriteLine("Camera Id: ");
+                bool toIntParse = int.TryParse(Console.ReadLine(), out int camId);
+                Camera? camera = _context.Cameras.Where(c => c.Id == camId).FirstOrDefault();
+                if (camera == null) throw new ConfigException("Camera not found.");
+                Camera? editedCam = ObjectFactory.CreateNewObj("camera") as Camera;
+                Response res =  await _service.PutCamera(camera.Id, camera);
+                Console.WriteLine(res.Message);
+            }
+            catch (ConfigException ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+            }
+            finally
+            {
                 Console.ForegroundColor = ConsoleColor.Green;
             }
         }

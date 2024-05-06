@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
@@ -81,6 +82,20 @@ namespace AvailabilityConfig
                 await _context.Configs.Where(c => c.Id == id).ExecuteDeleteAsync();
                 await _context.SaveChangesAsync();
                 return new Response(true, "Configuration deleted successfully");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Response> PutAvailabilityConfig(Config avConfig)
+        {
+            try
+            {
+                _context.Entry(avConfig).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return new Response(true, "Config updated.");
             }
             catch (Exception)
             {

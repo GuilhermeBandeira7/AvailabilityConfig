@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace AvailabilityConfig.Command
 {
     [DocCommand(instruction: "create",
-        documentation: "prompt the user to create a new configuration or camera. \n" +
+        documentation: "Prompt the user to create a new configuration or camera. \n" +
         "command: create <PARAMATER> to prompt for creation(s).\n")]
     internal class Create : ICommand
     {
@@ -36,12 +36,14 @@ namespace AvailabilityConfig.Command
             }
             catch (ConfigException confEx)
             {
-                Console.WriteLine(confEx.Message, Console.ForegroundColor = ConsoleColor.Red);
-                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(confEx.Message, Console.ForegroundColor = ConsoleColor.Red);             
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+            }
+            finally
+            {
                 Console.ForegroundColor = ConsoleColor.Green;
             }
         }

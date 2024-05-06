@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace AvailabilityConfig.Command
 {
     [DocCommand(instruction: "Delete a camera or configuration in the Database. ",
-        documentation: "prompt the user to delete a camera or configuration using it's id as parameter.\n" +
+        documentation: "Prompt the user to delete a camera or configuration using it's id as parameter.\n" +
         "command: delete <PARAMETER> where the parameter is camera or config.\n")]
     public class Delete : ICommand
     {
@@ -24,13 +24,17 @@ namespace AvailabilityConfig.Command
             {
 
             }
-            catch(ConfigException ex)
+            catch (ConfigException ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+            }
+            finally
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
             }
         }
     }

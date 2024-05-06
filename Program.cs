@@ -7,8 +7,7 @@ namespace AvailabilityConfig
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            SystemCommands commands = new SystemCommands();
-            Dialog.Dialog.InitialDialog(commands);
+            Dialog.Dialog.InitialDialog();
         }
     }
 }
