@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "J+QzknkeOklhismvAYr0vQ5hz1fpdP3a1R4Ob6rCz/aRAa7ZjDUpBKuWPfYKIfU3wtVw7PB0787VtU5NUk90vw==",
+  "dgSpecHash": "+LmYL5tq8ZrDz86c6Sf1HOLjNkAM6ExplmdiOsd1SaB61cnkG572IIzw78b0bGqYITVKpPhmMskE02ZESByhbg==",
   "success": true,
   "projectFilePath": "C:\\Users\\guilh\\Projetos\\WTManagement\\AvailabilityConfig\\AvailabilityConfig\\AvailabilityConfig.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\guilh\\.nuget\\packages\\fluentresults\\3.15.2\\fluentresults.3.15.2.nupkg.sha512",
     "C:\\Users\\guilh\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\guilh\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.17\\microsoft.entityframeworkcore.7.0.17.nupkg.sha512",
     "C:\\Users\\guilh\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.17\\microsoft.entityframeworkcore.abstractions.7.0.17.nupkg.sha512",
@@ -36,6 +37,7 @@
     "C:\\Users\\guilh\\.nuget\\packages\\system.security.permissions\\6.0.0\\system.security.permissions.6.0.0.nupkg.sha512",
     "C:\\Users\\guilh\\.nuget\\packages\\system.text.encodings.web\\7.0.0\\system.text.encodings.web.7.0.0.nupkg.sha512",
     "C:\\Users\\guilh\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512",
+    "C:\\Users\\guilh\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\guilh\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
   "logs": []

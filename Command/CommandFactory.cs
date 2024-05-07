@@ -11,16 +11,16 @@ namespace AvailabilityConfig.Command
         public static ICommand? CreateCommand(string[] command)
         {
             var cmd = command[0];
-            switch (cmd)
+            return cmd switch
             {
-                case "list": return new List();
-                case "create": return new Create();
-                case "delete": return new Delete();
-                case "help": return new Help();
-                case "modify": return new Modify();
-                case "clear": return new Clear();
-                default: return null;   
-            }
+                "list" => new List(),
+                "create" => new Create(),
+                "delete" => new Delete(),
+                "help" => new Help(),
+                "modify" => new Modify(),
+                "clear" => new Clear(),
+                _ => null,
+            };
         }
     }
 }

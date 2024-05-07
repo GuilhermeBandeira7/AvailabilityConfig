@@ -49,17 +49,13 @@ namespace AvailabilityConfig
                     Console.WriteLine(config.ToString());
                 }
             }
-            catch (ConfigException ex)
+            catch (ConfigException)
             {
-                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+                throw;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
-            }
-            finally
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
+                throw;
             }
         }
 

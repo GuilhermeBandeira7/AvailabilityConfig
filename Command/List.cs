@@ -1,10 +1,5 @@
 ﻿using AvailabilityConfig.CustomException;
 using AvailabilityConfig.Manager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AvailabilityConfig.Command
 {
@@ -20,10 +15,26 @@ namespace AvailabilityConfig.Command
 
         private static async Task ListAll(string[] args)
         {
-            if (args[1] == "config")
-                await ConfigManager.ListAllConfigs();
-            else
-                await CamManager.ListAllCameras();
+            try
+            {
+                if (args.Length == 1) throw new ConfigException("'list' needs the following parameters: <config> or <camera>");
+                if (args[1] == "config")
+                    await ConfigManager.ListAllConfigs();
+                else
+                    await CamManager.ListAllCameras();
+            }
+            catch (ConfigException confEx)
+            {
+                Console.WriteLine(confEx.Message, Console.ForegroundColor = ConsoleColor.Red);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message, Console.ForegroundColor = ConsoleColor.Red);
+            }
+            finally
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
         }
     }
 }
