@@ -5,6 +5,7 @@
 
 ## 🔨Functionality
  Generates configurations to monitor records of cameras.
+ <br>
  Possible configurations: 
  <br>
  Set time span to ping the camera's IP and get it's status.
