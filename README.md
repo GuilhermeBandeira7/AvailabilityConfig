@@ -1,10 +1,10 @@
 <h1 align="center"> Camera Record Config </h1>
 
 ## 🎯 About the Project
- C# Console Application to create the configurations for monotoring availability of cameras 
+ C# Console Application to create the configurations to monitor the availability of cameras 
 
 ## 🔨Functionality
- Generates configurations to monitor records of cameras.
+ Create configurations to monitor records of cameras.
  <br>
  Possible configurations: 
  <br>
