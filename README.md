@@ -8,13 +8,13 @@
  <br>
  Possible configurations: 
  <br>
- Set time span to ping the camera's IP and get it's status.
- <br>
- time span to calculate availability Daily, Weekly and Monthly. 
- <br>
- Add, update, edit and remove cameras.
- <br>
- Start and Stop recordings.
+  - Set time span to ping the camera's IP and get it's status.
+
+ - time span to calculate availability Daily, Weekly and Monthly. 
+
+ - Add, update, edit and remove cameras.
+
+ - Start and Stop recordings.
 
 ## 🛠️ Run the project
 
